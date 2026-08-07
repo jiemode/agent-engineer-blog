@@ -177,6 +177,39 @@ const stats = computed(() => [
   { label: '知识块', value: knowledgeBlocks.value, suffix: '块', tone: 'yellow' },
   { label: '总字数', value: totalChars.value, suffix: '字', tone: 'green' },
 ])
+
+// 知识地图：从 tags 里提取带 / 的领域标签，例如 projects/AnonForge、learning/fastapi，
+// 让访客不用滚动到底也能按“领域”快速进入某一类文章。
+const areas = computed(() => {
+  const counts = new Map<string, { label: string; count: number }>()
+  for (const post of posts.value) {
+    for (const tag of post.tags
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter(Boolean)) {
+      if (!tag.includes('/')) continue
+      const parts = tag.split('/').filter(Boolean)
+      const label = parts
+        .slice(-2)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' / ')
+      const current = counts.get(tag) ?? { label, count: 0 }
+      current.count += 1
+      counts.set(tag, current)
+    }
+  }
+  return Array.from(counts.entries()).map(([tag, item], index) => ({
+    tag,
+    label: item.label,
+    count: item.count,
+    tone: categoryColors[index % categoryColors.length],
+  }))
+})
+
+function selectArea(tag: string) {
+  selectedCategory.value = tag
+  document.getElementById('posts')?.scrollIntoView({ behavior: 'smooth' })
+}
 </script>
 
 <template>
@@ -261,6 +294,29 @@ const stats = computed(() => [
       >
         <span class="stat-value">{{ stat.value.toLocaleString() }}</span>
         <span class="stat-label">{{ stat.label }} {{ stat.suffix }}</span>
+      </div>
+    </section>
+
+    <!-- 知识地图：把 digital_garden 的目录结构变成首页导航，点击即可筛选对应领域的文章 -->
+    <section class="atlas-section page-shell" aria-label="知识地图导航">
+      <div class="section-head">
+        <p class="section-kicker">KNOWLEDGE ATLAS</p>
+        <h2>知识地图</h2>
+        <p>digital_garden 的全部笔记已经搬进这座积木乐园，按领域进入，快速找到想读的知识块。</p>
+      </div>
+
+      <div class="atlas-grid">
+        <button
+          v-for="area in areas"
+          :key="area.tag"
+          type="button"
+          :class="['atlas-card', `atlas-card--${area.tone}`]"
+          @click="selectArea(area.tag)"
+        >
+          <span class="atlas-count">{{ area.count }} 篇</span>
+          <strong>{{ area.label }}</strong>
+          <span class="atlas-cta">进入这个领域</span>
+        </button>
       </div>
     </section>
 
@@ -663,6 +719,66 @@ const stats = computed(() => [
 .stat-brick--blue { background: var(--blue); color: #fff; }
 .stat-brick--yellow { background: var(--yellow); }
 .stat-brick--green { background: var(--green); color: #fff; }
+
+/* 知识地图：把领域导航做成乐高按钮墙，点击后筛选文章区 */
+.atlas-section {
+  padding-top: 64px;
+  padding-bottom: 20px;
+}
+
+.atlas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.atlas-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 150px;
+  padding: 18px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.atlas-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow);
+}
+
+.atlas-card--red { background: var(--red); color: #fff; }
+.atlas-card--blue { background: var(--blue); color: #fff; }
+.atlas-card--green { background: var(--green); color: #fff; }
+.atlas-card--yellow { background: var(--yellow); }
+.atlas-card--purple { background: var(--purple); color: #fff; }
+
+.atlas-count {
+  padding: 4px 8px;
+  border: 2px solid currentColor;
+  border-radius: var(--radius);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.atlas-card strong {
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.atlas-cta {
+  margin-top: auto;
+  font-size: 12px;
+  font-weight: 900;
+  opacity: 0.85;
+}
 
 /* Bento Grid：借鉴 Aceternity 的非对称网格布局，用乐高描边和硬阴影保持设计语言统一 */
 .bento-section {
@@ -1109,6 +1225,10 @@ const stats = computed(() => [
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .atlas-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .bento-card--wide {
     grid-column: span 2;
   }
@@ -1138,6 +1258,7 @@ const stats = computed(() => [
 
   .stats-strip,
   .bento-grid,
+  .atlas-grid,
   .journey-list,
   .latest-row {
     grid-template-columns: 1fr;

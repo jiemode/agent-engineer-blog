@@ -25,8 +25,11 @@ def load_notes() -> list[tuple[str, str]]:
     if not KNOWLEDGE_DIR.exists():
         return []
     result = []
-    for file in sorted(KNOWLEDGE_DIR.glob("*.md")):
-        result.append((file.stem, file.read_text(encoding="utf-8")))
+    # 用 rglob 递归读取 knowledge/ 下所有 Markdown，
+    # 这样 digital-garden 导入的多级目录也能被检索到。
+    for file in sorted(KNOWLEDGE_DIR.rglob("*.md")):
+        title = file.relative_to(KNOWLEDGE_DIR).with_suffix("").as_posix()
+        result.append((title, file.read_text(encoding="utf-8")))
     return result
 
 

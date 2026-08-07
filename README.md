@@ -37,6 +37,24 @@ pnpm install
 pnpm run dev
 ```
 
+## 导入 digital_garden 文章
+
+博客内容来自 `digital_garden`。导入脚本只读源目录，并把文章写入数据库和 `knowledge/`：
+
+```powershell
+cd backend
+uv run python -m scripts.import_digital_garden
+```
+
+默认读取 `E:\AI\Projects\digital_garden`；如果换了笔记目录：
+
+```powershell
+$env:DIGITAL_GARDEN_DIR = "E:\path\to\notes"
+uv run python -m scripts.import_digital_garden
+```
+
+脚本可重复运行，标题相同的文章会更新，不会重复创建。
+
 ## 部署
 
 前端可部署到 GitHub Pages（免费），后端部署到 Render（免费额度），数据库用 Neon（免费 PostgreSQL）。
