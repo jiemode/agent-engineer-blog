@@ -11,8 +11,10 @@ const routes = [
   { path: '/assistant', component: Assistant },
 ]
 
+// GitHub Pages 会把站点部署在子路径 /agent-engineer-blog/ 下，
+// 所以 Router 必须使用 Vite 的 BASE_URL 作为 base，否则根路由匹配不到。
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 })
 
