@@ -1,0 +1,9 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+sqlmodel>=0.0.22
+pydantic-settings>=2.6.0
+pyjwt>=2.10.0
+bcrypt>=4.2.0
+jieba>=0.42.1
+httpx>=0.28.0
+psycopg[binary]>=3.2.0

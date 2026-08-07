@@ -1,0 +1,18 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# 本地数据库与环境变量
+blog.db
+.env
+
+# Node / 前端
+node_modules/
+dist/
+
+# 编辑器
+.vscode/
+.idea/

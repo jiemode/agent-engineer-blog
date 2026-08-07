@@ -1,0 +1,27 @@
+# Render Blueprint：把 FastAPI 后端部署成免费 Web Service。
+# 使用方式：Render 控制台 -> New -> Blueprint -> 选择本仓库；
+# 或者在 New -> Web Service 里按下面字段填写。
+services:
+  - type: web
+    name: agent-engineer-blog-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      # sync: false 表示不写死值，部署后在 Render 控制台手动填写。
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_BASE_URL
+        value: https://api.deepseek.com/v1
+      - key: LLM_MODEL
+        value: deepseek-chat
+      - key: APP_NAME
+        value: Agent Engineer Blog
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
