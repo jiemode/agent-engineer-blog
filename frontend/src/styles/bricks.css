@@ -1,0 +1,165 @@
+/* 乐高积木设计系统。
+   - 颜色：LEGO 官方红/蓝/黄/绿 + 白色纸面 + 黑色积木缝线；
+   - 形状：小圆角 + 粗描边 + 硬阴影，模拟塑料积木的实体感；
+   - 按钮：按下时“压进”页面，抬起时有积木高度。 */
+:root {
+  --ink: #101010;
+  --paper: #ffffff;
+  --red: #d92c2c;
+  --blue: #0055bf;
+  --yellow: #ffd500;
+  --green: #00a651;
+  --purple: #7b3fa0;
+  --muted: #5c5c5c;
+  --shadow: 5px 5px 0 var(--ink);
+  --shadow-sm: 3px 3px 0 var(--ink);
+  --radius: 4px;
+  --font: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+  color: inherit;
+  letter-spacing: 0;
+}
+
+h1,
+h2,
+h3,
+p {
+  letter-spacing: 0;
+}
+
+.page-shell {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.brick-band {
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.brick-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--blue);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.12s ease;
+}
+
+.brick-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow);
+}
+
+.brick-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.brick-btn:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.brick-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.brick-btn--red {
+  background: var(--red);
+}
+
+.brick-btn--blue {
+  background: var(--blue);
+}
+
+.brick-btn--green {
+  background: var(--green);
+}
+
+.brick-btn--yellow {
+  background: var(--yellow);
+  color: var(--ink);
+}
+
+.brick-btn--purple {
+  background: var(--purple);
+}
+
+.brick-btn--ghost {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.brick-btn--small {
+  min-height: 34px;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.stud-strip {
+  height: 14px;
+  background-color: var(--yellow);
+  border-top: 2px solid var(--ink);
+  background-image:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.85) 0 18%,
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 50% 62%,
+      rgba(0, 0, 0, 0.22) 20% 26%,
+      transparent 28%
+    );
+  background-size: 18px 18px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: #fff;
+  font-size: 15px;
+}
+
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 1px;
+}
+
+.error {
+  color: var(--red);
+  font-weight: 700;
+}

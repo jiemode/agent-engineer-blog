@@ -1,16 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { createPost } from '../api/posts'
 import MarkdownRenderer from '../components/MarkdownRenderer.vue'
+import { createPost } from '../api/posts'
 
 const router = useRouter()
 const title = ref('')
 const content = ref('')
 const tags = ref('')
 const error = ref('')
+const loading = ref(false)
+
+const canSubmit = computed(
+  () =>
+    title.value.trim().length > 0 &&
+    content.value.trim().length > 0 &&
+    !loading.value,
+)
 
 async function handleCreate() {
+  if (!canSubmit.value) return
+  loading.value = true
+  error.value = ''
   try {
     await createPost({
       title: title.value,
@@ -23,56 +34,101 @@ async function handleCreate() {
     router.push('/')
   } catch {
     error.value = '创建失败，请确认已登录'
+  } finally {
+    loading.value = false
   }
 }
 </script>
 
 <template>
-  <main class="editor">
+  <main class="page-shell editor-page">
     <h1>写文章</h1>
-    <input v-model="title" placeholder="标题" />
+
+    <input v-model="title" placeholder="标题" class="title-input" />
+
     <div class="editor-grid">
-      <textarea v-model="content" placeholder="支持 Markdown，例如：# 标题、**加粗**、```代码```" rows="16"></textarea>
-      <div class="preview">
+      <textarea
+        v-model="content"
+        placeholder="支持 Markdown：标题、加粗、代码块"
+        rows="16"
+      ></textarea>
+      <div class="preview-panel brick-band">
         <h2>预览</h2>
         <MarkdownRenderer :content="content" />
       </div>
     </div>
-    <input v-model="tags" placeholder="标签，用逗号分隔，例如：python,fastapi" />
-    <button @click="handleCreate">发布</button>
-    <p v-if="error" class="error">{{ error }}</p>
+
+    <input
+      v-model="tags"
+      placeholder="标签，用逗号分隔，例如：python,fastapi"
+    />
+
+    <div class="editor-actions">
+      <button
+        class="brick-btn brick-btn--green"
+        :disabled="!canSubmit"
+        @click="handleCreate"
+      >
+        {{ loading ? '发布中...' : '发布' }}
+      </button>
+      <p v-if="error" class="error">{{ error }}</p>
+    </div>
   </main>
 </template>
 
 <style scoped>
-.editor {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 24px;
+.editor-page {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  padding-top: 28px;
+  padding-bottom: 56px;
 }
+
+.editor-page h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.title-input {
+  font-size: 18px;
+  font-weight: 800;
+}
+
 .editor-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 14px;
 }
+
 textarea {
-  padding: 10px;
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.preview-panel {
+  padding: 12px 14px;
+  background: #fff;
+  overflow-wrap: anywhere;
+}
+
+.preview-panel h2 {
+  margin: 0 0 8px;
   font-size: 16px;
-  font-family: monospace;
 }
-.preview {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 12px;
+
+.editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
-input {
-  padding: 10px;
-  font-size: 16px;
+
+.editor-actions .error {
+  margin: 0;
 }
-.error {
-  color: red;
+
+@media (max-width: 720px) {
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
