@@ -163,3 +163,36 @@ textarea:focus-visible {
   color: var(--red);
   font-weight: 700;
 }
+
+/* 横向跑马灯：乐高版“信息流”，重复内容实现无缝滚动。 */
+.marquee {
+  overflow: hidden;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  background: var(--yellow);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 24s linear infinite;
+}
+
+.marquee-track span {
+  padding: 12px 30px;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
