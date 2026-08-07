@@ -6,9 +6,24 @@ body,
   min-height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
+}
+
+/* 让锚点跳转不要贴住页面顶部，保留一点呼吸空间 */
+[id] {
+  scroll-margin-top: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
