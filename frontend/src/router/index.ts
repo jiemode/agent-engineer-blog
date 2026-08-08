@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import Login from '../pages/Login.vue'
 import NewPost from '../pages/NewPost.vue'
@@ -18,7 +18,7 @@ const routes = [
 // GitHub Pages 会把站点部署在子路径 /agent-engineer-blog/ 下，
 // 所以 Router 必须使用 Vite 的 BASE_URL 作为 base，否则根路由匹配不到。
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes,
 })
 
