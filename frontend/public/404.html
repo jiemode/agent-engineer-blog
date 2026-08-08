@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting</title>
+    <script>
+      (function () {
+        var repoPath = '/agent-engineer-blog'
+        var path = location.pathname
+        if (path.indexOf(repoPath) === 0) {
+          path = path.slice(repoPath.length) || '/'
+        }
+        if (path.charAt(0) !== '/') path = '/' + path
+        var basePath = location.pathname
+          .split('/')
+          .slice(0, 2)
+          .join('/')
+          .concat('/')
+        location.replace(
+          location.origin + basePath + '#/' + path.replace(/^\//, '') + location.search,
+        )
+      })()
+    </script>
+  </head>
+  <body>Redirecting...</body>
+</html>
