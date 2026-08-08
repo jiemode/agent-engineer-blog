@@ -32,7 +32,7 @@ function logout() {
         </router-link>
 
         <nav class="header-nav" aria-label="主导航">
-          <router-link to="/#posts" class="nav-link">浏览文章</router-link>
+          <router-link to="/browse" class="nav-link">书房</router-link>
           <router-link to="/assistant" class="nav-link">AI 助理</router-link>
           <router-link v-if="isLoggedIn" to="/new" class="brick-btn brick-btn--red">
             写文章
@@ -74,8 +74,9 @@ function logout() {
           >
             GitHub
           </a>
+          <router-link to="/">首页</router-link>
+          <router-link to="/browse">书房</router-link>
           <router-link to="/assistant">问笔记</router-link>
-          <router-link to="/#posts">全部文章</router-link>
         </div>
       </div>
     </footer>

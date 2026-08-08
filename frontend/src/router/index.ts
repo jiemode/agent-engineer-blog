@@ -3,9 +3,13 @@ import Home from '../pages/Home.vue'
 import Login from '../pages/Login.vue'
 import NewPost from '../pages/NewPost.vue'
 import Assistant from '../pages/Assistant.vue'
+import BlogBrowse from '../pages/BlogBrowse.vue'
+import PostView from '../pages/PostView.vue'
 
 const routes = [
   { path: '/', component: Home },
+  { path: '/browse', component: BlogBrowse },
+  { path: '/post/:id', component: PostView },
   { path: '/login', component: Login },
   { path: '/new', component: NewPost },
   { path: '/assistant', component: Assistant },
