@@ -12,6 +12,10 @@ blog.db
 # Node / 前端
 node_modules/
 dist/
+*.log
+
+# pnpm 本地 store
+.pnpm-store/
 
 # 编辑器
 .vscode/
