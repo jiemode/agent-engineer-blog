@@ -25,6 +25,11 @@ export async function fetchPosts(): Promise<Post[]> {
   return data
 }
 
+export async function fetchPost(id: number | string): Promise<Post> {
+  const { data } = await http.get<Post>(`/posts/${id}`)
+  return data
+}
+
 export async function createPost(input: PostInput): Promise<Post> {
   const { data } = await http.post<Post>('/posts', input, authHeaders())
   return data
