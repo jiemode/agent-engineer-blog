@@ -59,6 +59,10 @@ function syncTagFromRoute() {
     typeof route.query.tag === 'string' ? route.query.tag : ''
 }
 
+function syncSearchFromRoute() {
+  search.value = typeof route.query.q === 'string' ? route.query.q : ''
+}
+
 function updateRouteTag(tag: string) {
   router.replace({ query: tag ? { tag } : {} })
 }
@@ -74,9 +78,12 @@ function selectArea(tag: string) {
 }
 
 function openPost(post: Post) {
+  const query: Record<string, string> = {}
+  if (selectedCategory.value) query.tag = selectedCategory.value
+  if (search.value.trim()) query.q = search.value.trim()
   router.push({
     path: `/post/${post.id}`,
-    query: selectedCategory.value ? { tag: selectedCategory.value } : {},
+    query,
   })
 }
 
@@ -87,10 +94,17 @@ function snippetOf(post: Post) {
     .slice(0, 120)
 }
 
-watch(() => route.query.tag, syncTagFromRoute)
+watch(
+  () => [route.query.tag, route.query.q],
+  () => {
+    syncTagFromRoute()
+    syncSearchFromRoute()
+  },
+)
 
 onMounted(async () => {
   syncTagFromRoute()
+  syncSearchFromRoute()
   try {
     posts.value = await fetchPosts()
   } catch {

@@ -32,6 +32,9 @@ const isLoggedIn = computed(() => Boolean(getToken()))
 const tag = computed(() =>
   typeof route.query.tag === 'string' ? route.query.tag : '',
 )
+const querySearch = computed(() =>
+  typeof route.query.q === 'string' ? route.query.q : '',
+)
 const postId = computed(() => Number(route.params.id))
 
 async function load() {
@@ -71,9 +74,12 @@ async function load() {
 }
 
 function backToBrowse() {
+  const query: Record<string, string> = {}
+  if (tag.value) query.tag = tag.value
+  if (querySearch.value) query.q = querySearch.value
   router.push({
     path: '/browse',
-    query: tag.value ? { tag: tag.value } : {},
+    query,
   })
 }
 
@@ -148,7 +154,10 @@ onMounted(load)
           :key="item.id"
           :to="{
             path: `/post/${item.id}`,
-            query: tag ? { tag } : {},
+            query: {
+              ...(tag ? { tag } : {}),
+              ...(querySearch ? { q: querySearch } : {}),
+            },
           }"
           class="related-card"
         >
