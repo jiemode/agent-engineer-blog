@@ -16,3 +16,6 @@ dist/
 # 编辑器
 .vscode/
 .idea/
+
+# 头脑风暴可视化文件
+.superpowers/
