@@ -6,7 +6,7 @@
 
 **Architecture:** Vue Router gains `/browse` and `/post/:id`. The homepage is trimmed to hero, stats, latest bricks, growth path, and CTA. Shared post filtering/stats logic lives in `src/utils/posts.ts`, and existing FastAPI endpoints are reused through `src/api/posts.ts`.
 
-**Tech Stack:** Vue 3, TypeScript, Vite, Vue Router, Axios, Vitest, lucide-vue-next.
+**Tech Stack:** Vue 3, TypeScript, Vite, Vue Router, Axios, Vitest, @lucide/vue.
 
 ---
 
@@ -365,15 +365,15 @@ git commit -m "feat: add fetchPost api"
 - Create: `frontend/src/pages/PostView.vue`
 - Modify: `frontend/src/App.vue`
 
-- [ ] **Step 1: Install lucide-vue-next**
+- [ ] **Step 1: Install @lucide/vue**
 
 Run:
 
 ```bash
-pnpm add lucide-vue-next
+pnpm add @lucide/vue
 ```
 
-Expected: package lock updates and `lucide-vue-next` appears in dependencies.
+Expected: package lock updates and `@lucide/vue` appears in dependencies.
 
 - [ ] **Step 2: Create route placeholder pages**
 
@@ -503,7 +503,7 @@ import {
   LibraryBig,
   Search,
   Tags,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { fetchPosts, type Post } from '../api/posts'
 import { buildCategories, filterPosts, splitTags } from '../utils/posts'
 
@@ -1054,7 +1054,7 @@ import {
   Sparkles,
   Tags,
   Trash2,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import MarkdownRenderer from '../components/MarkdownRenderer.vue'
 import {
   deletePost,
@@ -1465,7 +1465,7 @@ import {
   LibraryBig,
   MessageCircle,
   Sparkles,
-} from 'lucide-vue-next'
+} from '@lucide/vue'
 import { fetchPosts, type Post } from '../api/posts'
 import { computeStats, getLatestPosts } from '../utils/posts'
 import heroBricks from '../assets/hero-bricks.jpg'
