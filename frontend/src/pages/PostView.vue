@@ -27,6 +27,7 @@ const post = ref<Post | null>(null)
 const related = ref<Post[]>([])
 const loading = ref(true)
 const error = ref('')
+const deleteError = ref('')
 const notFound = ref(false)
 const isLoggedIn = computed(() => Boolean(getToken()))
 const tag = computed(() =>
@@ -40,6 +41,7 @@ const postId = computed(() => Number(route.params.id))
 async function load() {
   loading.value = true
   error.value = ''
+  deleteError.value = ''
   notFound.value = false
   post.value = null
   related.value = []
@@ -89,7 +91,7 @@ async function handleDelete() {
     await deletePost(post.value.id)
     router.push('/browse')
   } catch {
-    error.value = '删除失败'
+    deleteError.value = '删除失败'
   }
 }
 
@@ -138,6 +140,7 @@ onMounted(load)
             删除
           </button>
         </div>
+        <p v-if="deleteError" class="delete-error">{{ deleteError }}</p>
       </header>
 
       <MarkdownRenderer :content="post.content" />
@@ -258,6 +261,12 @@ onMounted(load)
   font-size: 12px;
   font-weight: 800;
   cursor: pointer;
+}
+
+.delete-error {
+  margin: 12px 0 0;
+  color: var(--red);
+  font-weight: 700;
 }
 
 .related-section {

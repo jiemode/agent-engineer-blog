@@ -94,6 +94,18 @@ function snippetOf(post: Post) {
     .slice(0, 120)
 }
 
+async function loadPosts() {
+  loading.value = true
+  error.value = ''
+  try {
+    posts.value = await fetchPosts()
+  } catch {
+    error.value = '加载失败，请确认后端正在运行'
+  } finally {
+    loading.value = false
+  }
+}
+
 watch(
   () => [route.query.tag, route.query.q],
   () => {
@@ -105,13 +117,7 @@ watch(
 onMounted(async () => {
   syncTagFromRoute()
   syncSearchFromRoute()
-  try {
-    posts.value = await fetchPosts()
-  } catch {
-    error.value = '加载失败，请确认后端正在运行'
-  } finally {
-    loading.value = false
-  }
+  await loadPosts()
 })
 </script>
 
@@ -194,6 +200,14 @@ onMounted(async () => {
 
         <p v-if="loading" class="state-text">加载中...</p>
         <p v-else-if="error" class="state-text state-text--error">{{ error }}</p>
+        <button
+          v-if="error"
+          type="button"
+          class="brick-btn brick-btn--ghost brick-btn--small retry-btn"
+          @click="loadPosts"
+        >
+          重试
+        </button>
         <p v-else-if="filteredPosts.length === 0" class="state-text">
           没有匹配的文章。
         </p>
@@ -504,6 +518,10 @@ onMounted(async () => {
 
 .state-text--error {
   color: var(--red);
+}
+
+.retry-btn {
+  margin-top: 14px;
 }
 
 @media (max-width: 900px) {
